@@ -1,0 +1,73 @@
+public class VishwajeetCalculator {
+    public Double xvalue { get; set; }
+    public Double yvalue { get; set; }
+    public Double result { get; set; }
+    public String operation { get; set; }
+    public String message { get; set; }
+
+    public PageReference add() {
+        result = xvalue + yvalue;
+        operation = 'Addition';
+        message = null;
+        return null;
+    }
+
+    public PageReference sub() {
+        result = xvalue - yvalue;
+        operation = 'Subtraction';
+        message = null;
+        return null;
+    }
+
+    public PageReference mul() {
+        result = xvalue * yvalue;
+        operation = 'Multiplication';
+        message = null;
+        return null;
+    }
+
+    public PageReference div() {
+        if (yvalue != 0) {
+            result = xvalue / yvalue;
+            message = null;
+        } else {
+            result = null;
+            message = 'Cannot divide by zero.';
+        }
+        operation = 'Division';
+        return null;
+    }
+
+    public PageReference square() {
+        result = xvalue * xvalue;
+        operation = 'Square';
+        message = null;
+        return null;
+    }
+
+    public PageReference sqrt() {
+        if (xvalue >= 0) {
+            result = Math.sqrt(xvalue);
+            operation = 'Square Root';
+            message = null;
+        } else {
+            result = null;
+            message = 'Cannot take square root of a negative number.';
+        }
+        return null;
+    }
+}
+
+
+// Anonymous window
+
+VishwajeetCalculator c = new VishwajeetCalculator();
+c.xvalue = 3;
+c.yvalue = 5;
+
+c.add(); System.debug(c.operation + ': ' + c.result);
+c.sub(); System.debug(c.operation + ': ' + c.result);
+c.mul(); System.debug(c.operation + ': ' + c.result);
+c.div(); System.debug(c.operation + ': ' + c.result);
+c.square(); System.debug(c.operation + ': ' + c.result);
+c.sqrt(); System.debug(c.operation + ': ' + c.result);
