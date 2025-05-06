@@ -1,4 +1,4 @@
-public class VishwajeetCalculator {
+public class clacu {
     public Double xvalue { get; set; }
     public Double yvalue { get; set; }
     public Double result { get; set; }
