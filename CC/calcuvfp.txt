@@ -1,0 +1,25 @@
+<apex:page controller="calcu">
+    <apex:form >
+        <apex:pageBlock title="Simple Calculator">
+            <apex:pageBlockSection columns="2">
+                <apex:inputText label="X Value" value="{!xvalue}" />
+                <apex:inputText label="Y Value" value="{!yvalue}" />
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection>
+                <apex:commandButton value="Add" action="{!add}" />
+                <apex:commandButton value="Subtract" action="{!sub}" />
+                <apex:commandButton value="Multiply" action="{!mul}" />
+                <apex:commandButton value="Divide" action="{!div}" />
+                <apex:commandButton value="Square" action="{!square}" />
+                <apex:commandButton value="Square Root" action="{!sqrt}" />
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="Result">
+                <apex:outputText value="Operation: {!operation}" rendered="{!NOT(ISNULL(operation))}" /><br/>
+                <apex:outputText value="Result: {!result}" rendered="{!NOT(ISNULL(result))}" /><br/>
+                <apex:outputText value="Message: {!message}" rendered="{!NOT(ISNULL(message))}" style="color:red;" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
