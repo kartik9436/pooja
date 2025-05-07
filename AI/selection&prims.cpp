@@ -1,13 +1,10 @@
-// Simplified C++ program using `int` instead of any custom types
 #include <iostream>
-#include <vector>
 #include <limits>
-#include <algorithm>
+#include <algorithm> // for std::swap
 using namespace std;
 
-// Selection Sort: in-place sort of `vector<int>`
-void selectionSort(vector<int>& a) {
-    int n = (int)a.size();
+// Selection Sort on a plain array
+void selectionSort(int a[], int n) {
     for (int i = 0; i + 1 < n; ++i) {
         int minIdx = i;
         for (int j = i + 1; j < n; ++j) {
@@ -17,21 +14,27 @@ void selectionSort(vector<int>& a) {
         swap(a[i], a[minIdx]);
     }
     cout << "\nSorted array: ";
-    for (int x : a) cout << x << ' ';
+    for (int i = 0; i < n; ++i)
+        cout << a[i] << ' ';
     cout << "\n";
 }
 
-// Prim’s MST: uses adjacency matrix with 0 = no edge
-void primMST(const vector<vector<int>>& g) {
-    int n = (int)g.size();
-    vector<int> key(n, numeric_limits<int>::max());
-    vector<int> parent(n, -1);
-    vector<bool> inMST(n, false);
+// Prim’s MST using a flat adjacency matrix (0 = no edge)
+void primMST(int *g, int n) {
+    int *key    = new int[n];
+    int *parent = new int[n];
+    bool *inMST = new bool[n];
+
+    for (int i = 0; i < n; ++i) {
+        key[i]    = numeric_limits<int>::max();
+        parent[i] = -1;
+        inMST[i]  = false;
+    }
     key[0] = 0;
 
     cout << "\nMST edges (u - v : w):\n";
     for (int count = 0; count < n; ++count) {
-        // find vertex u not in MST with minimum key
+        // pick the unused vertex u with smallest key[u]
         int u = -1;
         for (int v = 0; v < n; ++v) {
             if (!inMST[v] && (u == -1 || key[v] < key[u]))
@@ -39,24 +42,29 @@ void primMST(const vector<vector<int>>& g) {
         }
         if (u < 0) {
             cout << "Graph not connected.\n";
+            delete[] key; delete[] parent; delete[] inMST;
             return;
         }
         inMST[u] = true;
 
         if (parent[u] != -1) {
-            cout << parent[u] << " - " << u
-                 << " : " << g[parent[u]][u] << "\n";
+            int w = g[parent[u] * n + u];
+            cout << parent[u] << " - " << u << " : " << w << "\n";
         }
 
-        // update keys for neighbors of u
+        // relax edges from u
         for (int v = 0; v < n; ++v) {
-            int w = g[u][v];
+            int w = g[u * n + v];
             if (w > 0 && !inMST[v] && w < key[v]) {
-                key[v] = w;
+                key[v]    = w;
                 parent[v] = u;
             }
         }
     }
+
+    delete[] key;
+    delete[] parent;
+    delete[] inMST;
 }
 
 int main() {
@@ -79,22 +87,24 @@ int main() {
     }
 
     if (choice == 1) {
-        vector<int> a(n);
+        int *a = new int[n];
         cout << "Enter " << n << " integers separated by spaces:\n";
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i)
             cin >> a[i];
-        }
-        selectionSort(a);
-    } else {
-        vector<vector<int>> g(n, vector<int>(n));
+
+        selectionSort(a, n);
+        delete[] a;
+    }
+    else {
+        int *g = new int[n * n];
         cout << "Enter adjacency matrix (" << n << "x" << n << "):\n"
              << "(0 = no edge, positive weight otherwise)\n";
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                cin >> g[i][j];
-            }
-        }
-        primMST(g);
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < n; ++j)
+                cin >> g[i * n + j];
+
+        primMST(g, n);
+        delete[] g;
     }
 
     return 0;
